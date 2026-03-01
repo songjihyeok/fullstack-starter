@@ -3,7 +3,13 @@
 import { Badge } from "@/components/ui/badge";
 import type { ExamStatus } from "@/lib/api/exams/types";
 
-const STATUS_CONFIG: Record<ExamStatus, { label: string; variant: "default" | "secondary" | "destructive" | "outline" | "success" | "warning" }> = {
+const STATUS_CONFIG: Record<
+  ExamStatus,
+  {
+    label: string;
+    variant: "default" | "secondary" | "destructive" | "outline" | "success" | "warning";
+  }
+> = {
   uploaded: { label: "업로드됨", variant: "secondary" },
   ocr_processing: { label: "텍스트 추출 중", variant: "warning" },
   parsing: { label: "문제 분석 중", variant: "warning" },

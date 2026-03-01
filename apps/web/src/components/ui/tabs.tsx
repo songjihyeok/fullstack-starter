@@ -19,7 +19,14 @@ interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
   onValueChange?: (value: string) => void;
 }
 
-function Tabs({ defaultValue, value: controlledValue, onValueChange, className, children, ...props }: TabsProps) {
+function Tabs({
+  defaultValue,
+  value: controlledValue,
+  onValueChange,
+  className,
+  children,
+  ...props
+}: TabsProps) {
   const [internalValue, setInternalValue] = React.useState(defaultValue);
   const value = controlledValue ?? internalValue;
   const handleChange = onValueChange ?? setInternalValue;
@@ -88,7 +95,10 @@ const TabsContent = React.forwardRef<HTMLDivElement, TabsContentProps>(
       <div
         ref={ref}
         role="tabpanel"
-        className={cn("mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2", className)}
+        className={cn(
+          "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+          className
+        )}
         {...props}
       />
     );

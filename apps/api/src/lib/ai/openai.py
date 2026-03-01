@@ -76,15 +76,22 @@ class OpenAIProvider[T](AIProvider[T]):
         import base64
 
         images = image_data if isinstance(image_data, list) else [image_data]
+        ocr_prompt = (
+            "Extract all text from this exam image. "
+            "Preserve question numbers, choices, and any markings."
+        )
         content: list[dict[str, Any]] = [
-            {"type": "text", "text": "Extract all text from this exam image. Preserve question numbers, choices, and any markings."}
+            {"type": "text", "text": ocr_prompt}
         ]
         for img in images:
             b64 = base64.b64encode(img).decode()
             content.append(
                 {
                     "type": "image_url",
-                    "image_url": {"url": f"data:image/png;base64,{b64}", "detail": "high"},
+                    "image_url": {
+                        "url": f"data:image/png;base64,{b64}",
+                        "detail": "high",
+                    },
                 }
             )
 
@@ -118,8 +125,13 @@ class OpenAIProvider[T](AIProvider[T]):
 
         system = kwargs.pop("system", "You are a helpful assistant.")
         # Append schema hint so the model knows the target shape
-        schema_json = json.dumps(schema.model_json_schema(), indent=2)  # type: ignore[union-attr]
-        system += f"\n\nYou MUST respond with valid JSON matching this schema:\n{schema_json}"
+        schema_json = json.dumps(
+            schema.model_json_schema(), indent=2,  # type: ignore[union-attr]
+        )
+        system += (
+            "\n\nYou MUST respond with valid JSON matching "
+            f"this schema:\n{schema_json}"
+        )
 
         messages = [
             {"role": "system", "content": system},

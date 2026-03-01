@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
 import { FileText, Loader2, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
+import { useState } from "react";
 import { ExamStatusBadge } from "@/components/exams/exam-status-badge";
 import { FileUploadZone } from "@/components/exams/file-upload-zone";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useExamList, useUploadExam } from "@/lib/api/exams/hooks";
 
 export default function ExamsPage() {
@@ -46,19 +46,16 @@ export default function ExamsPage() {
           </p>
         </div>
         <Button onClick={() => setShowUpload(!showUpload)}>
-          <Plus className="h-4 w-4" />
-          새 시험 분석
+          <Plus className="h-4 w-4" />새 시험 분석
         </Button>
       </div>
 
       {/* Upload Section */}
-      {showUpload && (
+      {!!showUpload && (
         <Card className="mb-8">
           <CardHeader>
             <CardTitle>시험지 업로드</CardTitle>
-            <CardDescription>
-              시험지 이미지 또는 PDF를 업로드하세요
-            </CardDescription>
+            <CardDescription>시험지 이미지 또는 PDF를 업로드하세요</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
@@ -75,10 +72,7 @@ export default function ExamsPage() {
               />
             </div>
 
-            <FileUploadZone
-              onFileSelect={setSelectedFile}
-              disabled={upload.isPending}
-            />
+            <FileUploadZone onFileSelect={setSelectedFile} disabled={upload.isPending} />
 
             <div className="flex gap-3 justify-end">
               <Button
@@ -90,18 +84,16 @@ export default function ExamsPage() {
               >
                 취소
               </Button>
-              <Button
-                onClick={handleUpload}
-                disabled={!selectedFile || upload.isPending}
-              >
-                {upload.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
+              <Button onClick={handleUpload} disabled={!selectedFile || upload.isPending}>
+                {!!upload.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
                 분석 시작
               </Button>
             </div>
 
-            {upload.isError && (
+            {!!upload.isError && (
               <p className="text-sm text-destructive">
-                업로드 실패: {upload.error instanceof Error ? upload.error.message : "알 수 없는 오류"}
+                업로드 실패:{" "}
+                {upload.error instanceof Error ? upload.error.message : "알 수 없는 오류"}
               </p>
             )}
           </CardContent>
@@ -122,8 +114,7 @@ export default function ExamsPage() {
               시험지를 업로드하여 AI 분석을 시작하세요
             </p>
             <Button className="mt-4" onClick={() => setShowUpload(true)}>
-              <Plus className="h-4 w-4" />
-              첫 시험 업로드
+              <Plus className="h-4 w-4" />첫 시험 업로드
             </Button>
           </CardContent>
         </Card>
@@ -136,9 +127,7 @@ export default function ExamsPage() {
                   <div className="flex items-center gap-4">
                     <FileText className="h-8 w-8 text-muted-foreground shrink-0" />
                     <div>
-                      <p className="font-medium">
-                        {exam.title || "제목 없는 시험"}
-                      </p>
+                      <p className="font-medium">{exam.title || "제목 없는 시험"}</p>
                       <p className="text-xs text-muted-foreground">
                         {new Date(exam.created_at).toLocaleDateString("ko-KR", {
                           year: "numeric",
@@ -151,7 +140,7 @@ export default function ExamsPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
-                    {exam.accuracy_rate !== null && (
+                    {exam.accuracy_rate !== null && exam.accuracy_rate !== undefined && (
                       <span className="text-lg font-bold">
                         {Math.round(exam.accuracy_rate * 100)}%
                       </span>

@@ -111,7 +111,6 @@ class ExamPipelineService:
             return exam.raw_ocr_text
 
         # Download file from storage (caller must ensure file_key is populated)
-        from src.lib.config import settings
 
         # For images: use GPT-4o vision directly
         # For PDFs: convert pages to images first (handled at upload time)

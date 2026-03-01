@@ -1,5 +1,5 @@
+import { BarChart3, BookOpen, Brain, FileText } from "lucide-react";
 import Link from "next/link";
-import { FileText, Brain, BarChart3, BookOpen } from "lucide-react";
 import type { Locale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 

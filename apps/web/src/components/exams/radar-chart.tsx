@@ -22,22 +22,33 @@ export function RadarChart({ data, size = 280 }: RadarChartProps) {
 
   // Grid circles
   const gridCircles = Array.from({ length: levels }, (_, i) => {
-    const levelR = (r / levels) * (i + 1);
+    const level = i + 1;
+    const levelR = (r / levels) * level;
     const points = data
       .map((_, j) => {
         const angle = angleSlice * j - Math.PI / 2;
         return `${cx + levelR * Math.cos(angle)},${cy + levelR * Math.sin(angle)}`;
       })
       .join(" ");
-    return <polygon key={i} points={points} fill="none" stroke="currentColor" className="text-border" strokeWidth={0.5} />;
+    return (
+      <polygon
+        key={`grid-${level}`}
+        points={points}
+        fill="none"
+        stroke="currentColor"
+        className="text-border"
+        strokeWidth={0.5}
+      />
+    );
   });
 
   // Axis lines
-  const axisLines = data.map((_, i) => {
+  const axisLines = data.map((d) => {
+    const i = data.indexOf(d);
     const angle = angleSlice * i - Math.PI / 2;
     return (
       <line
-        key={i}
+        key={`axis-${d.axis}`}
         x1={cx}
         y1={cy}
         x2={cx + r * Math.cos(angle)}
@@ -58,14 +69,15 @@ export function RadarChart({ data, size = 280 }: RadarChartProps) {
   const dataPolygon = dataPoints.join(" ");
 
   // Labels
-  const labels = data.map((d, i) => {
+  const labels = data.map((d) => {
+    const i = data.indexOf(d);
     const angle = angleSlice * i - Math.PI / 2;
     const lr = r + 24;
     const x = cx + lr * Math.cos(angle);
     const y = cy + lr * Math.sin(angle);
     return (
       <text
-        key={i}
+        key={`label-${d.axis}`}
         x={x}
         y={y}
         textAnchor="middle"
@@ -78,12 +90,13 @@ export function RadarChart({ data, size = 280 }: RadarChartProps) {
   });
 
   // Data dots
-  const dots = data.map((d, i) => {
+  const dots = data.map((d) => {
+    const i = data.indexOf(d);
     const angle = angleSlice * i - Math.PI / 2;
     const dr = r * d.value;
     return (
       <circle
-        key={i}
+        key={`dot-${d.axis}`}
         cx={cx + dr * Math.cos(angle)}
         cy={cy + dr * Math.sin(angle)}
         r={3}
@@ -93,14 +106,18 @@ export function RadarChart({ data, size = 280 }: RadarChartProps) {
   });
 
   return (
-    <svg viewBox={`0 0 ${size} ${size}`} width={size} height={size} className="mx-auto">
+    <svg
+      viewBox={`0 0 ${size} ${size}`}
+      width={size}
+      height={size}
+      className="mx-auto"
+      role="img"
+      aria-labelledby="radar-chart-title"
+    >
+      <title id="radar-chart-title">Radar chart</title>
       {gridCircles}
       {axisLines}
-      <polygon
-        points={dataPolygon}
-        className="fill-primary/20 stroke-primary"
-        strokeWidth={2}
-      />
+      <polygon points={dataPolygon} className="fill-primary/20 stroke-primary" strokeWidth={2} />
       {dots}
       {labels}
     </svg>

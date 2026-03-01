@@ -160,14 +160,15 @@ Rules:
 def build_practice_generation_prompt(
     weakness_groups: list[dict],
 ) -> str:
-    """weakness_groups: [{"category": "...", "examples": [{"question_text": "...", ...}]}]"""
+    """Build practice generation prompt from weakness groups."""
     lines = []
     for group in weakness_groups:
         lines.append(f"Category: {group['category']}")
         for ex in group["examples"]:
             lines.append(
                 f"  Example wrong Q: {ex['question_text']}\n"
-                f"    Correct: {ex['correct_answer']}  |  User wrote: {ex['user_answer']}"
+                f"    Correct: {ex['correct_answer']}  |  "
+                f"User wrote: {ex['user_answer']}"
             )
         lines.append("")
     return (

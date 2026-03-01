@@ -55,7 +55,11 @@ class Exam(Base):
     )
     title: Mapped[str | None] = mapped_column(String(255), nullable=True)
     status: Mapped[ExamStatus] = mapped_column(
-        Enum(ExamStatus, name="exam_status"),
+        Enum(
+            ExamStatus,
+            name="exam_status",
+            values_callable=lambda e: [x.value for x in e],
+        ),
         default=ExamStatus.UPLOADED,
         server_default="uploaded",
     )
@@ -83,7 +87,9 @@ class Exam(Base):
 
     # Relationships
     questions: Mapped[list["ExamQuestion"]] = relationship(
-        back_populates="exam", cascade="all, delete-orphan", order_by="ExamQuestion.number"
+        back_populates="exam",
+        cascade="all, delete-orphan",
+        order_by="ExamQuestion.number",
     )
     weaknesses: Mapped[list["WeaknessAnalysis"]] = relationship(
         back_populates="exam", cascade="all, delete-orphan"
@@ -111,7 +117,11 @@ class ExamQuestion(Base):
     )
     number: Mapped[int] = mapped_column(Integer)
     question_type: Mapped[QuestionType] = mapped_column(
-        Enum(QuestionType, name="question_type"),
+        Enum(
+            QuestionType,
+            name="question_type",
+            values_callable=lambda e: [x.value for x in e],
+        ),
     )
     question_text: Mapped[str] = mapped_column(Text)
     choices: Mapped[list | None] = mapped_column(

@@ -6,11 +6,15 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
+from src.exams.models import (  # noqa: F401
+    Exam,
+    ExamQuestion,
+    PracticeSet,
+    WeaknessAnalysis,
+)
 from src.lib.config import settings
 from src.lib.database import Base
-
-# Import all models here for autogenerate
-# from src.users.models import User
+from src.users.model import User  # noqa: F401
 
 config = context.config
 

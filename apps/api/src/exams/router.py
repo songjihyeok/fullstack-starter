@@ -66,8 +66,12 @@ async def upload_exam(
 
     # Generate storage key
     exam_id = uuid.uuid4()
-    ext = file.filename.rsplit(".", 1)[-1] if file.filename and "." in file.filename else "bin"
-    file_key = f"exams/{user.sub}/{exam_id}.{ext}"
+    ext = (
+        file.filename.rsplit(".", 1)[-1]
+        if file.filename and "." in file.filename
+        else "bin"
+    )
+    file_key = f"exams/{user.id}/{exam_id}.{ext}"
 
     # TODO: Upload to storage provider in production
     # await storage.upload(bucket, file_key, file_bytes, file.content_type)
@@ -86,7 +90,7 @@ async def upload_exam(
     # Create exam record
     exam = Exam(
         id=exam_id,
-        user_id=uuid.UUID(user.sub),
+        user_id=uuid.UUID(user.id),
         title=title,
         file_key=file_key,
         file_type=file.content_type or "application/octet-stream",
@@ -94,7 +98,7 @@ async def upload_exam(
         status=ExamStatus.UPLOADED,
     )
     db.add(exam)
-    await db.flush()
+    await db.commit()
 
     # Queue background pipeline
     background_tasks.add_task(_run_pipeline_background, exam_id)
@@ -107,11 +111,11 @@ async def _extract_pdf_text(pdf_bytes: bytes, ai: OpenAIProvider) -> str:
     """Convert PDF pages to images and run OCR on each."""
     try:
         import fitz  # PyMuPDF
-    except ImportError:
+    except ImportError as err:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="PDF processing library (PyMuPDF) not installed.",
-        )
+        ) from err
 
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
     page_images: list[bytes] = []
@@ -163,7 +167,7 @@ async def get_exam(
     """Get full exam analysis result. Frontend polls this until status=completed."""
     result = await db.execute(
         select(Exam)
-        .where(Exam.id == exam_id, Exam.user_id == uuid.UUID(user.sub))
+        .where(Exam.id == exam_id, Exam.user_id == uuid.UUID(user.id))
         .options(
             selectinload(Exam.questions),
             selectinload(Exam.weaknesses),
@@ -251,14 +255,14 @@ async def list_exams(
     from sqlalchemy import func
 
     count_result = await db.execute(
-        select(func.count(Exam.id)).where(Exam.user_id == uuid.UUID(user.sub))
+        select(func.count(Exam.id)).where(Exam.user_id == uuid.UUID(user.id))
     )
     total = count_result.scalar() or 0
 
     # Fetch page
     result = await db.execute(
         select(Exam)
-        .where(Exam.user_id == uuid.UUID(user.sub))
+        .where(Exam.user_id == uuid.UUID(user.id))
         .order_by(Exam.created_at.desc())
         .offset(offset)
         .limit(limit)
@@ -303,7 +307,7 @@ async def retry_exam(
     result = await db.execute(
         select(Exam).where(
             Exam.id == exam_id,
-            Exam.user_id == uuid.UUID(user.sub),
+            Exam.user_id == uuid.UUID(user.id),
             Exam.status == ExamStatus.FAILED,
         )
     )
@@ -316,7 +320,7 @@ async def retry_exam(
 
     exam.status = ExamStatus.UPLOADED
     exam.error_message = None
-    await db.flush()
+    await db.commit()
 
     background_tasks.add_task(_run_pipeline_background, exam_id)
 

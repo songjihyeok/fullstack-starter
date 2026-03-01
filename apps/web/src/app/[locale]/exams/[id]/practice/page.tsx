@@ -1,19 +1,19 @@
 "use client";
 
-import { use, useCallback, useMemo, useState } from "react";
-import Link from "next/link";
 import {
   ArrowLeft,
   ArrowRight,
   CheckCircle2,
-  XCircle,
   Loader2,
   RotateCcw,
   Trophy,
+  XCircle,
 } from "lucide-react";
+import Link from "next/link";
+import { use, useCallback, useMemo, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useExamDetail } from "@/lib/api/exams/hooks";
 import type { PracticeQuestion } from "@/lib/api/exams/types";
@@ -162,11 +162,14 @@ export default function PracticePage({ params }: { params: Promise<{ id: string 
 
             {/* Per-question breakdown */}
             <div className="text-left space-y-2 mt-6 max-w-md mx-auto">
-              {flatQuestions.map((q, i) => {
-                const userAns = answers.get(i);
+              {flatQuestions.map((q) => {
+                const userAns = answers.get(q.index);
                 const isCorrect = userAns?.trim().toUpperCase() === q.answer.trim().toUpperCase();
                 return (
-                  <div key={i} className="flex items-center gap-2 text-sm">
+                  <div
+                    key={`result-${q.index}-${q.question}`}
+                    className="flex items-center gap-2 text-sm"
+                  >
                     {isCorrect ? (
                       <CheckCircle2 className="h-4 w-4 text-green-600 shrink-0" />
                     ) : (
@@ -210,7 +213,10 @@ export default function PracticePage({ params }: { params: Promise<{ id: string 
     <main className="mx-auto max-w-2xl px-4 py-8">
       {/* Top bar */}
       <div className="flex items-center justify-between mb-4">
-        <Link href={`/exams/${id}`} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+        <Link
+          href={`/exams/${id}`}
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+        >
           <ArrowLeft className="h-4 w-4" />
           돌아가기
         </Link>
@@ -236,7 +242,7 @@ export default function PracticePage({ params }: { params: Promise<{ id: string 
         <CardContent>
           {isMultipleChoice ? (
             <div className="space-y-2">
-              {currentQ.choices!.map((choice, i) => {
+              {currentQ.choices!.map((choice) => {
                 const letter = choice.charAt(0).toUpperCase();
                 const isSelected = userAnswer === letter || userAnswer === choice;
                 const isCorrectChoice =
@@ -245,22 +251,31 @@ export default function PracticePage({ params }: { params: Promise<{ id: string 
 
                 return (
                   <button
-                    key={i}
+                    key={choice}
                     type="button"
                     onClick={() => selectAnswer(letter)}
                     disabled={showAnswer}
                     className={cn(
                       "w-full text-left px-4 py-3 rounded-lg border text-sm transition-colors",
                       !showAnswer && "hover:bg-muted cursor-pointer",
-                      showAnswer && isCorrectChoice && "border-green-500 bg-green-50 text-green-800",
-                      showAnswer && isSelected && !isCorrectChoice && "border-destructive bg-red-50 text-destructive",
+                      showAnswer &&
+                        isCorrectChoice &&
+                        "border-green-500 bg-green-50 text-green-800",
+                      showAnswer &&
+                        isSelected &&
+                        !isCorrectChoice &&
+                        "border-destructive bg-red-50 text-destructive",
                       !showAnswer && isSelected && "border-primary bg-primary/5"
                     )}
                   >
                     <div className="flex items-center justify-between">
                       <span>{choice}</span>
-                      {showAnswer && isCorrectChoice && <CheckCircle2 className="h-4 w-4 text-green-600" />}
-                      {showAnswer && isSelected && !isCorrectChoice && <XCircle className="h-4 w-4 text-destructive" />}
+                      {!!(showAnswer && isCorrectChoice) && (
+                        <CheckCircle2 className="h-4 w-4 text-green-600" />
+                      )}
+                      {!!(showAnswer && isSelected && !isCorrectChoice) && (
+                        <XCircle className="h-4 w-4 text-destructive" />
+                      )}
                     </div>
                   </button>
                 );
@@ -286,11 +301,13 @@ export default function PracticePage({ params }: { params: Promise<{ id: string 
           )}
 
           {/* Feedback */}
-          {showAnswer && (
-            <div className={cn(
-              "mt-4 p-3 rounded-lg text-sm",
-              isCorrect ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800"
-            )}>
+          {!!showAnswer && (
+            <div
+              className={cn(
+                "mt-4 p-3 rounded-lg text-sm",
+                isCorrect ? "bg-green-50 text-green-800" : "bg-red-50 text-red-800"
+              )}
+            >
               {isCorrect ? (
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4" />
@@ -299,7 +316,9 @@ export default function PracticePage({ params }: { params: Promise<{ id: string 
               ) : (
                 <div className="flex items-center gap-2">
                   <XCircle className="h-4 w-4" />
-                  <span>오답입니다. 정답: <strong>{currentQ.answer}</strong></span>
+                  <span>
+                    오답입니다. 정답: <strong>{currentQ.answer}</strong>
+                  </span>
                 </div>
               )}
             </div>

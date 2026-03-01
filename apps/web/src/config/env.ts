@@ -24,6 +24,7 @@ export const env = createEnv({
     NEXT_PUBLIC_API_URL: z.string().url().optional().default("http://localhost:8000"),
     NEXT_PUBLIC_SITE_URL: z.string().url().optional().default("https://example.com"),
     NEXT_PUBLIC_ENABLE_DEVTOOLS: z.enum(["true", "false"]).optional().default("false"),
+    NEXT_PUBLIC_IS_OAUTH_NEEDED: z.enum(["true", "false"]).optional().default("true"),
     NEXT_PUBLIC_GIT_COMMIT: z.string().optional(),
   },
 
@@ -42,6 +43,7 @@ export const env = createEnv({
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
     NEXT_PUBLIC_ENABLE_DEVTOOLS: process.env.NEXT_PUBLIC_ENABLE_DEVTOOLS,
+    NEXT_PUBLIC_IS_OAUTH_NEEDED: process.env.NEXT_PUBLIC_IS_OAUTH_NEEDED,
     NEXT_PUBLIC_GIT_COMMIT: process.env.NEXT_PUBLIC_GIT_COMMIT,
   },
 

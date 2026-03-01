@@ -219,8 +219,18 @@ async def verify_oauth_token(provider: str, access_token: str) -> OAuthUserInfo:
         )
 
 
+_DEV_USER = CurrentUserInfo(
+    id="00000000-0000-0000-0000-000000000000",
+    email="dev@localhost",
+    name="Dev User",
+)
+
+
 async def get_current_user(request: Request) -> CurrentUserInfo:
     """Get current authenticated user from Authorization header."""
+    if not settings.IS_OAUTH_NEEDED:
+        return _DEV_USER
+
     auth_header = request.headers.get("Authorization")
     if not auth_header or not auth_header.startswith("Bearer "):
         raise HTTPException(

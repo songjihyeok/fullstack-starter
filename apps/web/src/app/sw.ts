@@ -1,13 +1,31 @@
 import { defaultCache } from "@serwist/turbopack/worker";
-import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
+import type { PrecacheEntry, RuntimeCaching, SerwistGlobalConfig } from "serwist";
 import { Serwist } from "serwist";
 
-const sameOriginCache = defaultCache.filter((rule) => {
-  if (typeof rule.handler !== "object" || !("cacheName" in rule.handler)) {
-    return true;
-  }
-  return rule.handler.cacheName !== "cross-origin";
-});
+const sameOriginCache: RuntimeCaching[] = defaultCache
+  .filter((rule) => {
+    if (typeof rule.handler !== "object" || !("cacheName" in rule.handler)) {
+      return true;
+    }
+    return rule.handler.cacheName !== "cross-origin";
+  })
+  .map((rule) => {
+    const originalMatcher = rule.matcher;
+    return {
+      ...rule,
+      matcher: (params: { url: URL; request: Request; sameOrigin: boolean }) => {
+        // Never handle cross-origin requests (e.g. API on a different port)
+        if (!params.sameOrigin) return false;
+        if (originalMatcher instanceof RegExp) {
+          return originalMatcher.test(params.url.href);
+        }
+        if (typeof originalMatcher === "function") {
+          return originalMatcher(params);
+        }
+        return false;
+      },
+    };
+  });
 
 declare global {
   interface WorkerGlobalScope extends SerwistGlobalConfig {

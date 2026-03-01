@@ -1,7 +1,7 @@
 "use client";
 
+import { FileImage, FileText, Upload, X } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
-import { Upload, FileImage, FileText, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -86,18 +86,18 @@ export function FileUploadZone({ onFileSelect, disabled }: FileUploadZoneProps) 
 
   return (
     <div className="w-full">
-      <div
-        role="button"
-        tabIndex={0}
+      <button
+        type="button"
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
         onDrop={handleDrop}
         onClick={() => !disabled && inputRef.current?.click()}
-        onKeyDown={(e) => e.key === "Enter" && !disabled && inputRef.current?.click()}
         className={cn(
-          "relative flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-10 transition-colors cursor-pointer",
-          dragActive ? "border-primary bg-primary/5" : "border-border hover:border-primary/50 hover:bg-muted/50",
+          "relative flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed p-10 transition-colors cursor-pointer w-full bg-transparent",
+          dragActive
+            ? "border-primary bg-primary/5"
+            : "border-border hover:border-primary/50 hover:bg-muted/50",
           disabled && "pointer-events-none opacity-50",
           error && "border-destructive/50"
         )}
@@ -127,12 +127,8 @@ export function FileUploadZone({ onFileSelect, disabled }: FileUploadZoneProps) 
           <>
             <Upload className="h-10 w-10 text-muted-foreground" />
             <div className="text-center">
-              <p className="text-sm font-medium">
-                시험지를 드래그하거나 클릭하여 업로드
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                JPG, PNG, WebP, PDF (최대 20MB)
-              </p>
+              <p className="text-sm font-medium">시험지를 드래그하거나 클릭하여 업로드</p>
+              <p className="text-xs text-muted-foreground mt-1">JPG, PNG, WebP, PDF (최대 20MB)</p>
             </div>
           </>
         )}
@@ -145,8 +141,8 @@ export function FileUploadZone({ onFileSelect, disabled }: FileUploadZoneProps) 
           className="hidden"
           disabled={disabled}
         />
-      </div>
-      {error && <p className="mt-2 text-sm text-destructive">{error}</p>}
+      </button>
+      {!!error && <p className="mt-2 text-sm text-destructive">{error}</p>}
     </div>
   );
 }

@@ -1,24 +1,24 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
-import Link from "next/link";
 import {
+  AlertTriangle,
   ArrowLeft,
+  BookOpen,
   CheckCircle2,
-  XCircle,
   Loader2,
   RefreshCw,
-  BookOpen,
-  AlertTriangle,
+  XCircle,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { use, useCallback, useEffect, useState } from "react";
+import { ExamStatusBadge } from "@/components/exams/exam-status-badge";
+import { RadarChart } from "@/components/exams/radar-chart";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ExamStatusBadge } from "@/components/exams/exam-status-badge";
-import { RadarChart } from "@/components/exams/radar-chart";
 import { useExamDetail, useRetryExam } from "@/lib/api/exams/hooks";
 import type { ExamStatus } from "@/lib/api/exams/types";
 
@@ -37,7 +37,10 @@ interface PageProps {
 
 export default function ExamDetailPage({ params }: PageProps) {
   const { id } = use(params);
-  const isProcessing = (status: ExamStatus) => PROCESSING_STATUSES.includes(status);
+  const isProcessing = useCallback(
+    (status: ExamStatus) => PROCESSING_STATUSES.includes(status),
+    []
+  );
   const [polling, setPolling] = useState(true);
 
   const { data: exam, isLoading } = useExamDetail(id, {
@@ -49,7 +52,7 @@ export default function ExamDetailPage({ params }: PageProps) {
     if (exam && !isProcessing(exam.status)) {
       setPolling(false);
     }
-  }, [exam]);
+  }, [exam, isProcessing]);
   const retry = useRetryExam();
 
   if (isLoading) {
@@ -74,7 +77,10 @@ export default function ExamDetailPage({ params }: PageProps) {
     <main className="mx-auto max-w-4xl px-4 py-8">
       {/* Header */}
       <div className="mb-6">
-        <Link href="/exams" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
+        <Link
+          href="/exams"
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4"
+        >
           <ArrowLeft className="h-4 w-4" />
           시험 목록
         </Link>
@@ -112,8 +118,14 @@ export default function ExamDetailPage({ params }: PageProps) {
             <div className="w-64 mt-4">
               <Progress
                 value={
-                  ["uploaded", "ocr_processing", "parsing", "grading", "analyzing", "generating"]
-                    .indexOf(exam.status) * 20
+                  [
+                    "uploaded",
+                    "ocr_processing",
+                    "parsing",
+                    "grading",
+                    "analyzing",
+                    "generating",
+                  ].indexOf(exam.status) * 20
                 }
               />
             </div>
@@ -145,7 +157,7 @@ export default function ExamDetailPage({ params }: PageProps) {
       {exam.status === "completed" && (
         <>
           {/* Score Summary */}
-          {exam.grading && (
+          {!!exam.grading && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               <Card>
                 <CardContent className="p-4 text-center">
@@ -213,10 +225,10 @@ export default function ExamDetailPage({ params }: PageProps) {
                           </div>
                           <p className="text-sm mb-2">{q.question_text}</p>
 
-                          {q.choices && (
+                          {!!q.choices && (
                             <div className="text-sm text-muted-foreground mb-2 space-y-0.5">
-                              {q.choices.map((c, i) => (
-                                <p key={i}>{c}</p>
+                              {q.choices.map((c) => (
+                                <p key={c}>{c}</p>
                               ))}
                             </div>
                           )}
@@ -228,7 +240,9 @@ export default function ExamDetailPage({ params }: PageProps) {
                             </div>
                             <div>
                               <span className="text-muted-foreground">내 답: </span>
-                              <span className={`font-medium ${q.is_correct ? "text-green-700" : "text-destructive"}`}>
+                              <span
+                                className={`font-medium ${q.is_correct ? "text-green-700" : "text-destructive"}`}
+                              >
                                 {q.user_answer}
                               </span>
                             </div>
@@ -251,8 +265,8 @@ export default function ExamDetailPage({ params }: PageProps) {
                     </CardContent>
                   </Card>
                 ) : (
-                  exam.weakness_analysis.map((w, i) => (
-                    <Card key={i}>
+                  exam.weakness_analysis.map((w) => (
+                    <Card key={`weakness-${w.question_number}-${w.category}`}>
                       <CardContent className="p-4">
                         <div className="flex items-center gap-2 mb-2">
                           <Badge variant="destructive">Q{w.question_number}</Badge>
@@ -277,7 +291,7 @@ export default function ExamDetailPage({ params }: PageProps) {
 
             {/* Statistics Tab */}
             <TabsContent value="statistics">
-              {exam.statistics && (
+              {!!exam.statistics && (
                 <div className="space-y-6 mt-4">
                   {/* Performance Summary */}
                   <Card>
@@ -285,7 +299,9 @@ export default function ExamDetailPage({ params }: PageProps) {
                       <CardTitle className="text-base">종합 평가</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm leading-relaxed">{exam.statistics.performance_summary}</p>
+                      <p className="text-sm leading-relaxed">
+                        {exam.statistics.performance_summary}
+                      </p>
                     </CardContent>
                   </Card>
 
@@ -309,8 +325,8 @@ export default function ExamDetailPage({ params }: PageProps) {
                         </CardDescription>
                       </CardHeader>
                       <CardContent className="space-y-3">
-                        {exam.statistics.category_accuracy.map((cat, i) => (
-                          <div key={i}>
+                        {exam.statistics.category_accuracy.map((cat) => (
+                          <div key={cat.category}>
                             <div className="flex items-center justify-between text-sm mb-1">
                               <span>{cat.category}</span>
                               <span className="font-medium">
@@ -356,27 +372,31 @@ export default function ExamDetailPage({ params }: PageProps) {
                       </Link>
                     </div>
 
-                    {exam.practice_sets.map((ps, i) => (
-                      <Card key={i}>
+                    {exam.practice_sets.map((ps) => (
+                      <Card key={ps.category}>
                         <CardHeader>
                           <CardTitle className="text-base">{ps.category}</CardTitle>
                           <CardDescription>{ps.questions.length}문항</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
                           {ps.questions.map((pq, j) => (
-                            <div key={j} className="border-b last:border-0 pb-3 last:pb-0">
+                            <div
+                              key={pq.question}
+                              className="border-b last:border-0 pb-3 last:pb-0"
+                            >
                               <p className="text-sm font-medium mb-1">
                                 {j + 1}. {pq.question}
                               </p>
-                              {pq.choices && (
+                              {!!pq.choices && (
                                 <div className="text-sm text-muted-foreground space-y-0.5 ml-4">
-                                  {pq.choices.map((c, k) => (
-                                    <p key={k}>{c}</p>
+                                  {pq.choices.map((c) => (
+                                    <p key={c}>{c}</p>
                                   ))}
                                 </div>
                               )}
                               <p className="text-xs text-muted-foreground mt-1 ml-4">
-                                정답: <span className="font-medium text-green-700">{pq.answer}</span>
+                                정답:{" "}
+                                <span className="font-medium text-green-700">{pq.answer}</span>
                               </p>
                             </div>
                           ))}
