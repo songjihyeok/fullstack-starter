@@ -28,6 +28,7 @@ COPY alembic.ini .
 RUN useradd --create-home --shell /bin/bash appuser
 USER appuser
 
-EXPOSE 8000
+ENV PORT=8080
+EXPOSE 8080
 
-CMD ["uv", "run", "fastapi", "run", "src/main.py", "--port", "8000"]
+CMD ["uv", "run", "fastapi", "run", "src/main.py", "--port", "8080"]
