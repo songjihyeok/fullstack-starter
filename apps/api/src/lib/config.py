@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     )
 
     # Project
-    PROJECT_NAME: str = "fullstack-starter-api"
+    PROJECT_NAME: str = "odap-api"
     PROJECT_ENV: Literal["local", "staging", "prod"] = "local"
 
     # Database
@@ -27,6 +27,7 @@ class Settings(BaseSettings):
 
     # Auth (better-auth)
     BETTER_AUTH_URL: str = "http://localhost:3000"
+    IS_OAUTH_NEEDED: bool = True
 
     # JWT/JWE (stateless authentication)
     JWT_SECRET: str = "your-super-secret-jwt-key-change-in-production"  # noqa: S105

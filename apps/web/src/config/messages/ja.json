@@ -1,5 +1,5 @@
 {
-  "title": "フルスタックスターター",
+  "title": "誤答研究所",
   "common": {
     "loading": "読み込み中...",
     "error": "エラーが発生しました",
@@ -9,9 +9,76 @@
     "confirm": "確認",
     "delete": "削除"
   },
-  "loginWelcome": "フルスタックスターターへようこそ",
-  "loginSubtitle": "ソーシャルアカウントで簡単に始めましょう",
-  "continueWithGoogle": "Googleで始める",
-  "continueWithFacebook": "Facebookで始める",
-  "continueWithGithub": "GitHubで始める"
+  "home": {
+    "headline": "誤答研究所",
+    "description": "試験用紙をアップロードすると、AIが採点し、弱点を分析し、間違えた問題の類似問題を作成します。",
+    "cta": "試験分析を始める",
+    "featureGrading": "AI自動採点",
+    "featureGradingDesc": "選択式は自動マッチング、記述式は意味ベースで採点します",
+    "featureWeakness": "弱点分析",
+    "featureWeaknessDesc": "間違えた問題をカテゴリ別に分類し、弱点を可視化します",
+    "featurePractice": "類似問題生成",
+    "featurePracticeDesc": "間違えた問題タイプだけを選び、難易度別に練習問題を自動生成します"
+  },
+  "exam": {
+    "title": "試験分析",
+    "description": "試験用紙をアップロードすると、AIが採点、弱点分析、類似問題を生成します",
+    "upload": "新しい分析",
+    "uploadTitle": "試験用紙アップロード",
+    "uploadDescription": "試験の画像またはPDFをアップロードしてください",
+    "titlePlaceholder": "例：中間テスト英語",
+    "titleLabel": "試験タイトル（任意）",
+    "startAnalysis": "分析開始",
+    "noExams": "まだ分析された試験はありません",
+    "noExamsDescription": "試験用紙をアップロードしてAI分析を開始しましょう",
+    "firstUpload": "最初の試験をアップロード",
+    "untitled": "無題の試験",
+    "accuracy": "正答率",
+    "totalQuestions": "全問題数",
+    "correct": "正解",
+    "incorrect": "不正解",
+    "backToList": "試験一覧",
+    "processing": "AI分析中...",
+    "analysisFailed": "分析失敗",
+    "tabs": {
+      "questions": "問題分析",
+      "weakness": "弱点分析",
+      "statistics": "統計",
+      "practice": "類似問題"
+    },
+    "questionType": {
+      "multipleChoice": "選択式",
+      "subjective": "記述式"
+    },
+    "similarity": "類似度",
+    "correctAnswer": "正解",
+    "myAnswer": "あなたの回答",
+    "subCategory": "サブカテゴリ",
+    "errorType": "エラータイプ",
+    "noWeakness": "全問正解！弱点分析は不要です！",
+    "overallEvaluation": "総合評価",
+    "skillRadar": "能力レーダー",
+    "categoryAccuracy": "カテゴリ別正答率",
+    "mostFrequentMistake": "最も多いミス",
+    "noPractice": "全問正解！類似問題は生成されませんでした！",
+    "startPractice": "練習モードを開始",
+    "practice": {
+      "title": "類似問題練習",
+      "goBack": "戻る",
+      "completed": "完了",
+      "submit": "提出",
+      "inputPlaceholder": "回答を入力してください...",
+      "correctFeedback": "正解です！",
+      "incorrectFeedback": "不正解です。正解：",
+      "prev": "前へ",
+      "next": "次へ",
+      "viewResults": "結果を見る",
+      "quizComplete": "練習完了！",
+      "retryQuiz": "もう一度",
+      "backToAnalysis": "分析結果へ"
+    },
+    "dragOrClick": "試験用紙をドラッグまたはクリックしてアップロード",
+    "fileTypes": "JPG、PNG、WebP、PDF（最大20MB）",
+    "uploadFailed": "アップロード失敗"
+  }
 }

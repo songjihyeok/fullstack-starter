@@ -32,11 +32,13 @@ interface ProvidersProps {
 }
 
 function BackendJwtBridge() {
+  const isOAuthNeeded = env.NEXT_PUBLIC_IS_OAUTH_NEEDED === "true";
   const { data: session, isPending } = useSession();
 
   const user = session?.user;
 
   useEffect(() => {
+    if (!isOAuthNeeded) return;
     if (isPending) return;
 
     if (!user) {
@@ -49,7 +51,7 @@ function BackendJwtBridge() {
     if (hasBackendAccessToken()) return;
 
     exchangeOAuthForBackendJwt().catch(() => {});
-  }, [isPending, user]);
+  }, [isPending, user, isOAuthNeeded]);
 
   return null;
 }

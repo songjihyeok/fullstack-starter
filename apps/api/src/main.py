@@ -234,5 +234,7 @@ async def readiness_check() -> dict[str, str]:
 
 # Register routers here
 from src.auth.router import router as auth_router  # noqa: E402
+from src.exams.router import router as exams_router  # noqa: E402
 
 app.include_router(auth_router, prefix="/api/auth", tags=["authentication"])
+app.include_router(exams_router, prefix="/api/exams", tags=["exams"])

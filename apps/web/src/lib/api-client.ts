@@ -2,6 +2,8 @@ import axios from "axios";
 import { env } from "@/config/env";
 import { clearTokens, getAccessToken, getRefreshToken, setAccessToken } from "@/lib/auth/token";
 
+const isOAuthNeeded = env.NEXT_PUBLIC_IS_OAUTH_NEEDED === "true";
+
 export const apiClient = axios.create({
   baseURL: env.NEXT_PUBLIC_API_URL,
   timeout: 30000,
@@ -25,6 +27,8 @@ function onRefreshed(token: string) {
 }
 
 apiClient.interceptors.request.use((config) => {
+  if (!isOAuthNeeded) return config;
+
   const token = getAccessToken();
   if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -35,6 +39,8 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
+    if (!isOAuthNeeded) return Promise.reject(error);
+
     const originalRequest = error.config;
 
     if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
