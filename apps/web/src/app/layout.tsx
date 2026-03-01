@@ -4,8 +4,8 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Fullstack Starter",
-  description: "Modern fullstack monorepo template",
+  title: "오답 연구소",
+  description: "AI 기반 시험 분석 및 맞춤 유사 문제 생성 서비스",
 };
 
 interface RootLayoutProps {

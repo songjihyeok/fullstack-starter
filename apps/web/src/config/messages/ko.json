@@ -1,5 +1,5 @@
 {
-  "title": "풀스택 스타터",
+  "title": "오답 연구소",
   "common": {
     "loading": "로딩 중...",
     "error": "오류가 발생했습니다",
@@ -9,9 +9,76 @@
     "confirm": "확인",
     "delete": "삭제"
   },
-  "loginWelcome": "풀스택 스타터에 오신 것을 환영합니다",
-  "loginSubtitle": "소셜 계정으로 간편하게 시작하세요",
-  "continueWithGoogle": "구글로 시작하기",
-  "continueWithFacebook": "페이스북으로 시작하기",
-  "continueWithGithub": "깃허브로 시작하기"
+  "home": {
+    "headline": "오답 연구소",
+    "description": "시험지를 업로드하면 AI가 채점하고, 약점을 분석하고, 틀린 문제만 골라 유사 문제를 만들어 드립니다.",
+    "cta": "시험 분석 시작하기",
+    "featureGrading": "AI 자동 채점",
+    "featureGradingDesc": "객관식은 자동 매칭, 주관식은 의미 기반으로 채점합니다",
+    "featureWeakness": "약점 분석",
+    "featureWeaknessDesc": "틀린 문제를 카테고리별로 분류하고 취약점을 시각화합니다",
+    "featurePractice": "유사 문제 생성",
+    "featurePracticeDesc": "틀린 유형만 골라 난이도별 연습 문제를 자동 생성합니다"
+  },
+  "exam": {
+    "title": "시험 분석",
+    "description": "시험지를 업로드하면 AI가 채점, 약점 분석, 유사 문제를 생성합니다",
+    "upload": "새 시험 분석",
+    "uploadTitle": "시험지 업로드",
+    "uploadDescription": "시험지 이미지 또는 PDF를 업로드하세요",
+    "titlePlaceholder": "예: 중간고사 영어",
+    "titleLabel": "시험 제목 (선택)",
+    "startAnalysis": "분석 시작",
+    "noExams": "아직 분석된 시험이 없습니다",
+    "noExamsDescription": "시험지를 업로드하여 AI 분석을 시작하세요",
+    "firstUpload": "첫 시험 업로드",
+    "untitled": "제목 없는 시험",
+    "accuracy": "정답률",
+    "totalQuestions": "전체 문항",
+    "correct": "정답",
+    "incorrect": "오답",
+    "backToList": "시험 목록",
+    "processing": "AI 분석 진행 중...",
+    "analysisFailed": "분석 실패",
+    "tabs": {
+      "questions": "문항 분석",
+      "weakness": "약점 분석",
+      "statistics": "통계",
+      "practice": "유사 문제"
+    },
+    "questionType": {
+      "multipleChoice": "객관식",
+      "subjective": "주관식"
+    },
+    "similarity": "유사도",
+    "correctAnswer": "정답",
+    "myAnswer": "내 답",
+    "subCategory": "세부 유형",
+    "errorType": "오류 유형",
+    "noWeakness": "모든 문제를 맞혀서 약점 분석이 필요 없습니다!",
+    "overallEvaluation": "종합 평가",
+    "skillRadar": "능력 레이더",
+    "categoryAccuracy": "카테고리별 정답률",
+    "mostFrequentMistake": "가장 빈번한 실수",
+    "noPractice": "모든 문제를 맞혀서 유사 문제가 생성되지 않았습니다!",
+    "startPractice": "풀기 모드로 시작",
+    "practice": {
+      "title": "유사 문제 풀기",
+      "goBack": "돌아가기",
+      "completed": "완료",
+      "submit": "제출",
+      "inputPlaceholder": "답을 입력하세요...",
+      "correctFeedback": "정답입니다!",
+      "incorrectFeedback": "오답입니다. 정답:",
+      "prev": "이전",
+      "next": "다음",
+      "viewResults": "결과 보기",
+      "quizComplete": "연습 완료!",
+      "retryQuiz": "다시 풀기",
+      "backToAnalysis": "분석 결과로"
+    },
+    "dragOrClick": "시험지를 드래그하거나 클릭하여 업로드",
+    "fileTypes": "JPG, PNG, WebP, PDF (최대 20MB)",
+    "uploadFailed": "업로드 실패"
+  }
 }
