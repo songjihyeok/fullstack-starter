@@ -31,4 +31,4 @@ USER appuser
 ENV PORT=8080
 EXPOSE 8080
 
-CMD ["uv", "run", "--no-sync", "fastapi", "run", "src/main.py", "--port", "8080"]
+CMD ["uv", "run", "--no-sync", "fastapi", "run", "src/main.py", "--port", "8080", "--proxy-headers", "--forwarded-allow-ips", "*"]
