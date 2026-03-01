@@ -1,5 +1,10 @@
 import { defaultCache } from "@serwist/turbopack/worker";
-import type { PrecacheEntry, RuntimeCaching, SerwistGlobalConfig } from "serwist";
+import type {
+  PrecacheEntry,
+  RouteMatchCallbackOptions,
+  RuntimeCaching,
+  SerwistGlobalConfig,
+} from "serwist";
 import { Serwist } from "serwist";
 
 const sameOriginCache: RuntimeCaching[] = defaultCache
@@ -13,7 +18,7 @@ const sameOriginCache: RuntimeCaching[] = defaultCache
     const originalMatcher = rule.matcher;
     return {
       ...rule,
-      matcher: (params: { url: URL; request: Request; sameOrigin: boolean }) => {
+      matcher: (params: RouteMatchCallbackOptions) => {
         // Never handle cross-origin requests (e.g. API on a different port)
         if (!params.sameOrigin) return false;
         if (originalMatcher instanceof RegExp) {
