@@ -62,7 +62,14 @@ async def request_id_middleware(
     if span.is_recording():
         span.set_attribute("request.id", request_id)
 
-    response = await call_next(request)
+    try:
+        response = await call_next(request)
+    except Exception as exc:
+        logger.exception("Unhandled exception in middleware", exc_info=exc)
+        response = JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"error": "internal_server_error", "message": str(exc)},
+        )
     response.headers["X-Request-ID"] = request_id
     return response
 
