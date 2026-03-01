@@ -40,6 +40,7 @@ app = FastAPI(
     title=settings.PROJECT_NAME,
     version="0.1.0",
     lifespan=lifespan,
+    redirect_slashes=False,
     docs_url="/docs" if settings.PROJECT_ENV != "prod" else None,
     redoc_url="/redoc" if settings.PROJECT_ENV != "prod" else None,
 )

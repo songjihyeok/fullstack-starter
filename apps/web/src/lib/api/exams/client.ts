@@ -30,7 +30,7 @@ export async function getExam(examId: string): Promise<ExamDetailResponse> {
 }
 
 export async function listExams(page = 1, limit = 20): Promise<PaginatedExams> {
-  const { data } = await apiClient.get<PaginatedExams>(BASE, {
+  const { data } = await apiClient.get<PaginatedExams>(`${BASE}/`, {
     params: { page, limit },
   });
   return data;
