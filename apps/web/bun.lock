@@ -12,6 +12,7 @@
         "@opentelemetry/sdk-node": "^0.212.0",
         "@opentelemetry/sdk-trace-base": "^2.5.1",
         "@opentelemetry/semantic-conventions": "^1.40.0",
+        "@serwist/next": "9.5.6",
         "@serwist/turbopack": "^9.5.6",
         "@t3-oss/env-nextjs": "^0.13.10",
         "@tanstack/react-devtools": "^0.9.6",
@@ -647,9 +648,13 @@
 
     "@serwist/build": ["@serwist/build@9.5.6", "", { "dependencies": { "@serwist/utils": "9.5.6", "common-tags": "1.8.2", "glob": "10.5.0", "pretty-bytes": "6.1.1", "source-map": "0.8.0-beta.0", "zod": "4.3.6" }, "peerDependencies": { "typescript": ">=5.0.0" }, "optionalPeers": ["typescript"] }, "sha512-/YUi2BKrvnIkYg8k/PW5N/lAR4N0h/F8eBaqCaDNOy2fdOiNCkvRaWq/ZaoYN5tocvNsMc7OSm7+m1aJqR7trQ=="],
 
+    "@serwist/next": ["@serwist/next@9.5.6", "", { "dependencies": { "@serwist/build": "9.5.6", "@serwist/utils": "9.5.6", "@serwist/webpack-plugin": "9.5.6", "@serwist/window": "9.5.6", "browserslist": "4.28.1", "glob": "10.5.0", "kolorist": "1.8.0", "semver": "7.7.3", "serwist": "9.5.6", "zod": "4.3.6" }, "peerDependencies": { "@serwist/cli": "^9.5.6", "next": ">=14.0.0", "react": ">=18.0.0", "typescript": ">=5.0.0" }, "optionalPeers": ["@serwist/cli", "typescript"] }, "sha512-xObhrC3ctSgLMXeDiAypJr9smetEKTKLd79Z5GrgVzh+xjCIOqsdr2f/FrlzDxKX9SO8TMjRt7BjIjv4RrcOBg=="],
+
     "@serwist/turbopack": ["@serwist/turbopack@9.5.6", "", { "dependencies": { "@serwist/build": "9.5.6", "@serwist/utils": "9.5.6", "@serwist/window": "9.5.6", "@swc/core": "1.15.11", "browserslist": "4.28.1", "kolorist": "1.8.0", "semver": "7.7.3", "serwist": "9.5.6", "zod": "4.3.6" }, "peerDependencies": { "esbuild": ">=0.25.0 <1.0.0", "esbuild-wasm": ">=0.25.0 <1.0.0", "next": ">=14.0.0", "react": ">=18.0.0", "typescript": ">=5.0.0" }, "optionalPeers": ["esbuild", "esbuild-wasm", "typescript"] }, "sha512-wgy0bp/Aejq3HGw2X3AZ8fYbkFKmuRA1rOpB2jNjk2hpsUH1CraN3r1rkSS5eU8qL82YlabXE/tMfmKStHpE7Q=="],
 
     "@serwist/utils": ["@serwist/utils@9.5.6", "", { "peerDependencies": { "browserslist": ">=4" }, "optionalPeers": ["browserslist"] }, "sha512-WV5hAZd/Oo8hyHv7Pd39EDZu3bIhKe0lW39lyMlKVHm5gIGEnPdrH3DojlXAFHiV18nz/bLeqkVo6rK82kBGHw=="],
+
+    "@serwist/webpack-plugin": ["@serwist/webpack-plugin@9.5.6", "", { "dependencies": { "@serwist/build": "9.5.6", "@serwist/utils": "9.5.6", "pretty-bytes": "6.1.1", "zod": "4.3.6" }, "peerDependencies": { "typescript": ">=5.0.0", "webpack": "4.4.0 || ^5.9.0" }, "optionalPeers": ["typescript", "webpack"] }, "sha512-kdDqe4AVDJMcS3zTCpV42p+WjJRKb4t0P3flqmceMXfKUDrvhZR3kUWN6yCFi8TLSbHd4hnZZ0cyKa5bCHaa+Q=="],
 
     "@serwist/window": ["@serwist/window@9.5.6", "", { "dependencies": { "@types/trusted-types": "2.0.7", "serwist": "9.5.6" }, "peerDependencies": { "typescript": ">=5.0.0" }, "optionalPeers": ["typescript"] }, "sha512-/RztZ97HxiEFlDSCpiLd/6nGz3oDQkKMSDF8epJcta7xdUTAZVwMksEodl3x9Y7jyGItF6T/jY7OBCPrN5IVqQ=="],
 

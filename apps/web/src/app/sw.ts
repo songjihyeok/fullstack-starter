@@ -1,4 +1,4 @@
-import { defaultCache } from "@serwist/turbopack/worker";
+import { defaultCache } from "@serwist/next/worker";
 import type {
   PrecacheEntry,
   RouteMatchCallbackOptions,

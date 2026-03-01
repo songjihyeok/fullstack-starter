@@ -1,6 +1,5 @@
 "use client";
 
-import { SerwistProvider } from "@serwist/turbopack/react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Provider as JotaiProvider } from "jotai";
 import dynamic from "next/dynamic";
@@ -60,18 +59,16 @@ export function Providers({ children, locale, messages }: ProvidersProps) {
   const queryClient = getQueryClient();
 
   return (
-    <SerwistProvider swUrl="/serwist/sw.js">
-      <QueryClientProvider client={queryClient}>
-        <NuqsAdapter>
-          <JotaiProvider>
-            <BackendJwtBridge />
-            <NextIntlClientProvider locale={locale} messages={messages} timeZone="Asia/Seoul">
-              {children}
-            </NextIntlClientProvider>
-          </JotaiProvider>
-          <TanStackDevTools />
-        </NuqsAdapter>
-      </QueryClientProvider>
-    </SerwistProvider>
+    <QueryClientProvider client={queryClient}>
+      <NuqsAdapter>
+        <JotaiProvider>
+          <BackendJwtBridge />
+          <NextIntlClientProvider locale={locale} messages={messages} timeZone="Asia/Seoul">
+            {children}
+          </NextIntlClientProvider>
+        </JotaiProvider>
+        <TanStackDevTools />
+      </NuqsAdapter>
+    </QueryClientProvider>
   );
 }

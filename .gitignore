@@ -59,6 +59,10 @@ apps/mobile/.flutter-plugins
 apps/mobile/.flutter-plugins-dependencies
 apps/mobile/.packages
 
+# Serwist (generated service worker)
+apps/web/public/sw.js
+apps/web/public/sw.js.map
+
 # Misc
 *.bak
 *.tmp
