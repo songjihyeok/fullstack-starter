@@ -5,6 +5,7 @@ from typing import Any
 
 import httpx
 import structlog
+from pydantic import BaseModel
 
 from src.lib.ai.base import AIProvider
 from src.lib.config import settings
@@ -37,7 +38,7 @@ class OpenAIProvider[T](AIProvider[T]):
         self,
         messages: list[dict[str, Any]],
         *,
-        response_format: dict | None = None,
+        response_format: dict[str, Any] | None = None,
         temperature: float = 0.2,
         max_tokens: int = 4096,
     ) -> str:
@@ -71,7 +72,7 @@ class OpenAIProvider[T](AIProvider[T]):
 
     # ── AIProvider interface ─────────────────────────────────────────────
 
-    async def analyze_image(self, image_data: bytes | list[bytes]) -> T:  # type: ignore[override]
+    async def analyze_image(self, image_data: bytes | list[bytes]) -> T:
         """Send image(s) to GPT-4o vision for OCR / analysis."""
         import base64
 
@@ -113,7 +114,7 @@ class OpenAIProvider[T](AIProvider[T]):
     async def generate_structured(
         self,
         prompt: str,
-        schema: type[T],  # type: ignore[override]
+        schema: type[BaseModel],  # type: ignore[override]
         **kwargs: Any,
     ) -> T:
         """Generate a response and parse it into a Pydantic model.
@@ -126,7 +127,7 @@ class OpenAIProvider[T](AIProvider[T]):
         system = kwargs.pop("system", "You are a helpful assistant.")
         # Append schema hint so the model knows the target shape
         schema_json = json.dumps(
-            schema.model_json_schema(), indent=2,  # type: ignore[union-attr]
+            schema.model_json_schema(), indent=2,
         )
         system += (
             "\n\nYou MUST respond with valid JSON matching "
@@ -142,9 +143,9 @@ class OpenAIProvider[T](AIProvider[T]):
             response_format={"type": "json_object"},
             **kwargs,
         )
-        return schema.model_validate_json(raw)  # type: ignore[union-attr]
+        return schema.model_validate_json(raw)  # type: ignore[return-value]
 
 
-def get_openai_provider(model: str = _DEFAULT_MODEL) -> OpenAIProvider:
+def get_openai_provider(model: str = _DEFAULT_MODEL) -> OpenAIProvider[Any]:
     """Factory function for dependency injection."""
     return OpenAIProvider(model=model)

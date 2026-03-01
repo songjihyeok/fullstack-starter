@@ -10,6 +10,7 @@ The entire pipeline runs as a background task (worker or BackgroundTasks).
 
 import uuid
 from collections import defaultdict
+from typing import Any
 
 import structlog
 from sqlalchemy import select
@@ -51,7 +52,7 @@ logger = structlog.get_logger(__name__)
 class ExamPipelineService:
     """Orchestrates the full exam analysis pipeline."""
 
-    def __init__(self, ai: OpenAIProvider, db: AsyncSession) -> None:
+    def __init__(self, ai: OpenAIProvider[Any], db: AsyncSession) -> None:
         self._ai = ai
         self._db = db
 
@@ -134,11 +135,12 @@ class ExamPipelineService:
     async def _parse_questions(self, ocr_text: str) -> ParsedExamResult:
         """OpenAI call #1: OCR text → structured questions."""
         prompt = build_question_parse_prompt(ocr_text)
-        return await self._ai.generate_structured(
+        result: ParsedExamResult = await self._ai.generate_structured(
             prompt,
             ParsedExamResult,
             system=QUESTION_PARSE_SYSTEM,
         )
+        return result
 
     async def _save_parsed_questions(
         self, exam: Exam, parsed: ParsedExamResult
@@ -168,7 +170,7 @@ class ExamPipelineService:
         self, exam: Exam, questions: list[ExamQuestion]
     ) -> None:
         """Grade all questions. Objective = exact match, subjective = AI."""
-        subjective_batch: list[dict] = []
+        subjective_batch: list[dict[str, Any]] = []
 
         for q in questions:
             if q.question_type == QuestionType.MULTIPLE_CHOICE:
@@ -279,11 +281,12 @@ class ExamPipelineService:
                 for w in weaknesses
             ],
         )
-        return await self._ai.generate_structured(
+        result: StatisticsResult = await self._ai.generate_structured(
             prompt,
             StatisticsResult,
             system=STATISTICS_SYSTEM,
         )
+        return result
 
     async def _generate_practice(
         self,
@@ -296,7 +299,7 @@ class ExamPipelineService:
             return
 
         # Group wrong questions by weakness category
-        category_map: dict[str, list[dict]] = defaultdict(list)
+        category_map: dict[str, list[dict[str, Any]]] = defaultdict(list)
         weakness_by_qnum = {w.question_number: w for w in weaknesses}
         for q in wrong_questions:
             w = weakness_by_qnum.get(q.number)

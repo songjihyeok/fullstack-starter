@@ -1,6 +1,7 @@
 """Exam analysis API endpoints."""
 
 import uuid
+from typing import Any
 
 import structlog
 from fastapi import APIRouter, BackgroundTasks, HTTPException, UploadFile, status
@@ -107,10 +108,10 @@ async def upload_exam(
     return ExamUploadResponse(exam_id=exam_id, status=ExamStatus.UPLOADED.value)
 
 
-async def _extract_pdf_text(pdf_bytes: bytes, ai: OpenAIProvider) -> str:
+async def _extract_pdf_text(pdf_bytes: bytes, ai: OpenAIProvider[Any]) -> str:
     """Convert PDF pages to images and run OCR on each."""
     try:
-        import fitz  # PyMuPDF
+        import fitz  # type: ignore[import-not-found]  # PyMuPDF
     except ImportError as err:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -247,7 +248,7 @@ async def list_exams(
     user: CurrentUser,
     page: int = 1,
     limit: int = 20,
-) -> dict:
+) -> dict[str, Any]:
     """List all exams for the current user."""
     offset = (page - 1) * limit
 

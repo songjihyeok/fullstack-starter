@@ -3,6 +3,7 @@
 import enum
 import uuid as uuid_lib
 from datetime import datetime
+from typing import Any
 
 from sqlalchemy import (
     DateTime,
@@ -75,7 +76,7 @@ class Exam(Base):
     correct_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
     incorrect_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
     accuracy_rate: Mapped[float | None] = mapped_column(Float, nullable=True)
-    statistics: Mapped[dict | None] = mapped_column(
+    statistics: Mapped[dict[str, Any] | None] = mapped_column(
         JSONB, nullable=True, comment="Category stats, radar data, summary"
     )
     created_at: Mapped[datetime] = mapped_column(
@@ -124,7 +125,7 @@ class ExamQuestion(Base):
         ),
     )
     question_text: Mapped[str] = mapped_column(Text)
-    choices: Mapped[list | None] = mapped_column(
+    choices: Mapped[list[Any] | None] = mapped_column(
         JSONB, nullable=True, comment='["A) ...", "B) ...", ...]'
     )
     correct_answer: Mapped[str] = mapped_column(Text)
@@ -180,7 +181,7 @@ class PracticeSet(Base):
         index=True,
     )
     category: Mapped[str] = mapped_column(String(255))
-    questions: Mapped[list] = mapped_column(
+    questions: Mapped[list[Any]] = mapped_column(
         JSONB, comment='[{"question": "...", "choices": [...], "answer": "..."}]'
     )
 

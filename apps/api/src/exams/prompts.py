@@ -5,6 +5,7 @@ the full system + user message pair. Keeping prompts in one module
 makes them easy to version, test, and A/B swap.
 """
 
+from typing import Any
 
 # ─── 1. Question Structure Parsing (OCR text → structured JSON) ─────────────
 
@@ -49,7 +50,7 @@ Rules:
 
 
 def build_subjective_grading_prompt(
-    questions: list[dict],
+    questions: list[dict[str, Any]],
 ) -> str:
     lines = []
     for q in questions:
@@ -84,7 +85,7 @@ Rules:
 
 
 def build_weakness_analysis_prompt(
-    wrong_questions: list[dict],
+    wrong_questions: list[dict[str, Any]],
 ) -> str:
     lines = []
     for q in wrong_questions:
@@ -118,8 +119,8 @@ Rules:
 
 
 def build_statistics_prompt(
-    questions: list[dict],
-    weaknesses: list[dict],
+    questions: list[dict[str, Any]],
+    weaknesses: list[dict[str, Any]],
 ) -> str:
     q_lines = []
     for q in questions:
@@ -158,7 +159,7 @@ Rules:
 
 
 def build_practice_generation_prompt(
-    weakness_groups: list[dict],
+    weakness_groups: list[dict[str, Any]],
 ) -> str:
     """Build practice generation prompt from weakness groups."""
     lines = []
