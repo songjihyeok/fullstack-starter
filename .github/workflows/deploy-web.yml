@@ -68,8 +68,7 @@ jobs:
         run: |
           IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/fullstack-starter-images/web:${{ github.sha }}"
           docker build -t $IMAGE apps/web \
-            --build-arg NEXT_PUBLIC_API_URL=${{ vars.API_URL }} \
-            --build-arg NEXT_PUBLIC_BETTER_AUTH_URL=${{ vars.WEB_URL }}
+            --build-arg NEXT_PUBLIC_API_URL=${{ vars.API_URL }}
           docker push $IMAGE
           echo "IMAGE=$IMAGE" >> $GITHUB_ENV
 

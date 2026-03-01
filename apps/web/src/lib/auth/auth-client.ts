@@ -21,7 +21,7 @@ type BackendTokenResponse = {
 };
 
 export const authClient = createAuthClient({
-  baseURL: env.NEXT_PUBLIC_BETTER_AUTH_URL,
+  baseURL: env.NEXT_PUBLIC_BETTER_AUTH_URL || undefined,
 });
 
 export const { useSession, signIn } = authClient;
