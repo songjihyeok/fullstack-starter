@@ -31,6 +31,24 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     logger.info("Starting application", env=settings.PROJECT_ENV)
     configure_telemetry()
     instrument_app(app)
+
+    # Ensure dev user exists when OAuth is disabled
+    if not settings.IS_OAUTH_NEEDED:
+        try:
+            async with async_session_factory() as session:
+                await session.execute(
+                    text(
+                        "INSERT INTO users (id, email, name, email_verified) "
+                        "VALUES ('00000000-0000-0000-0000-000000000000', "
+                        "'dev@localhost', 'Dev User', false) "
+                        "ON CONFLICT (id) DO NOTHING"
+                    )
+                )
+                await session.commit()
+                logger.info("Dev user ensured")
+        except Exception:
+            logger.warning("Could not ensure dev user", exc_info=True)
+
     yield
     # Shutdown
     logger.info("Shutting down application")
